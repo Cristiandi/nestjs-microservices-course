@@ -13,3 +13,8 @@ but there are also some drawbacks:
 - **Deployment complexity**: We need to deploy multiple services, which is more complex than deploying a single monolithic application.
 
 This technique is not a silver bullet, and it's not suitable for avery application as it introduces additional complexity and overhead, new problems and new challenges we need to deal with, such as network latency, fault tolerance, data consistency, etc. As software developers, we need to always carefully consider the pros and cons before we decide to use microservices in our application.
+
+# Monolithic Architecture vs Microservices
+When working in a monolithic architecture, we have a single application that contains all of our business logic. These monolithic applications are usually divided into modules but all these modules are deployed together as a single unit. These applications are usually deployed onto a single server, and all the modules share the same memory and CPU. The modules communicate with each other using in-process calls, be it function calls, method calls, etc. That's why we can easily share data between modules and we can also transactions that span multiple modules, also we can easily debug monolithic applications as we have a single process and can easily trace the execution flow.
+In microservices architecture, we have a set of small services that are deployed independently. Each service is a separate application that contains all of the business logic for a specific domain. These services can communicate with each other using the network via HTTP, TCP, RCP, etc. or message brokers like RabbitMQ, Kafka, etc. 
+It is necessary to keep in mind that each architecture has its pros and cons.
