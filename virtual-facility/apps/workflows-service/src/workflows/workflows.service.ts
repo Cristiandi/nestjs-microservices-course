@@ -1,11 +1,13 @@
 import { CreateWorkflowDto, UpdateWorkflowDto } from '@app/workflows';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Workflow } from './entities/workflow.entity';
 
 @Injectable()
 export class WorkflowsService {
+  private readonly logger = new Logger(WorkflowsService.name);
+
   constructor(
     @InjectRepository(Workflow)
     private readonly workflowsRepository: Repository<Workflow>,
@@ -24,11 +26,16 @@ export class WorkflowsService {
   }
 
   async create(createWorkflowDto: CreateWorkflowDto): Promise<Workflow> {
-    console.log('createWorkflowDto', createWorkflowDto);
     const workflow = this.workflowsRepository.create({
       ...createWorkflowDto,
     });
+
     const newWorkflowEntity = await this.workflowsRepository.save(workflow);
+
+    this.logger.debug(
+      `created workflow with id ${newWorkflowEntity.id} for building ${newWorkflowEntity.buildingId}`,
+    );
+
     return newWorkflowEntity;
   }
 
