@@ -25,3 +25,12 @@ So there are a few different ways to keep a service's Persistence Data private.
 - **Private-tables-per-service**: Each service owns a set of tables that musy only be accessed by that service. Other services cannt access these tables directly. If other services need to query data on these tables, they must do it through the owning service.
 - **Schema per service**: Each service has a database schema that's private to that service.
 - **Database server per service**: Each service its own dedicated database server, this approach requires much more resources, but it also provides a higher lever of isolation. While having database per service generally makes a lot of sense for larger rprganizations where teams are working on different services, it's not always the best choice for smaller organizations.
+
+# Orchestration vs Choreography
+## Orchestration
+is a centralized approach to service coordination. In this approach, we have a central component (called orchestrator) that is responsible for coordinating the execution of services. The orchestrator is aware of the state of each service and knows exactly when to invoke each service. The orchestrator is also responsible for handling errors and retries. Note that this orchestrator could be implemented as either a separate service or it could be part of one of the existing services.
+
+## Choreography
+On the other hand, Choreography is a decentralized approach to service coordination. In this approach, each service is responsible for handling its own state and knows exactly when to invoke other services. The services communicate with each other using events. The main advantage of this approach is that it's more flexible and scalable. However, it's also more complex and harder to debug.
+
+Each of these approaches has its own pros and cons as there is no one-size-fits-all solution. In some cases, orchestration might be a better choice, while in others choreography might work out better. It all depends on your specific use case and requirements.
