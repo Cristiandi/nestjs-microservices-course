@@ -36,4 +36,10 @@ On the other hand, Choreography is a decentralized approach to service coordinat
 Each of these approaches has its own pros and cons as there is no one-size-fits-all solution. In some cases, orchestration might be a better choice, while in others choreography might work out better. It all depends on your specific use case and requirements.
 
 # Data Consistency
-In monolithic applications, we might use ACID for our database transactions. Which stands for Atomicity, Consistency, Isolation, and Durability to ensure data consistency however with microservices architectures we don't have this luxury any more, instead we need to come up with a different approach to ensure data consistency among all our different services.
+In monolithic applications, we might use ACID for our database transactions. Which stands for Atomicity, Consistency, Isolation, and Durability to ensure data consistency however with microservices architectures we don't have this luxury any more, instead we need to come up with a different approaches to ensure data consistency among all our different services.
+
+With some of the different approaches we will achieve eventual consistency, which means that the system will eventually become consistent after a certain period of time. This is in contrast to strong consistency, which means that the system is always consistent. Eventual consistency is a trade-off that we make in distributed systems to achieve better availability and partition tolerance.
+
+## Inbox pattern
+
+## Outbox pattern
