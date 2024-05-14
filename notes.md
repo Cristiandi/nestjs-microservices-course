@@ -34,3 +34,6 @@ is a centralized approach to service coordination. In this approach, we have a c
 On the other hand, Choreography is a decentralized approach to service coordination. In this approach, each service is responsible for handling its own state and knows exactly when to invoke other services. The services communicate with each other using events. The main advantage of this approach is that it's more flexible and scalable. However, it's also more complex and harder to debug.
 
 Each of these approaches has its own pros and cons as there is no one-size-fits-all solution. In some cases, orchestration might be a better choice, while in others choreography might work out better. It all depends on your specific use case and requirements.
+
+# Data Consistency
+In monolithic applications, we might use ACID for our database transactions. Which stands for Atomicity, Consistency, Isolation, and Durability to ensure data consistency however with microservices architectures we don't have this luxury any more, instead we need to come up with a different approach to ensure data consistency among all our different services.
