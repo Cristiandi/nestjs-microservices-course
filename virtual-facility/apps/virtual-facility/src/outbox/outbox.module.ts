@@ -17,6 +17,9 @@ import { OutboxEntitySubscriber } from './outbox.entity-subscriber';
         options: {
           urls: [process.env.RABBITMQ_URL],
           queue: 'workflows-service',
+          headers: {
+            test: 'test',
+          },
         },
       },
     ]),

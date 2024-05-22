@@ -34,6 +34,7 @@ export class OutboxProcessor {
       target: WORKFLOWS_SERVICE.description,
       take: 100,
     });
+
     await Promise.all(
       messages.map(async (message) => {
         await this.dispatchWorkflowEvent(message);
@@ -46,7 +47,10 @@ export class OutboxProcessor {
 
   async dispatchWorkflowEvent(outbox: Outbox) {
     await lastValueFrom(
-      this.workflowsService.emit(outbox.type, outbox.payload),
+      this.workflowsService.emit(outbox.type, {
+        ...outbox.payload,
+        _id: outbox.id,
+      }),
     );
   }
 }

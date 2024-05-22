@@ -1,15 +1,50 @@
-import { Controller, Get, Body, Patch, Param, Delete } from '@nestjs/common';
-import { WorkflowsService } from './workflows.service';
 import { CreateWorkflowDto, UpdateWorkflowDto } from '@app/workflows';
-import { EventPattern, Payload } from '@nestjs/microservices';
+import { Body, Controller, Delete, Get, Param, Patch } from '@nestjs/common';
+import { WorkflowsService } from './workflows.service';
+import { Ctx, EventPattern, Payload, RmqContext } from '@nestjs/microservices';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Inbox } from '../inbox/entities/inbox.entity';
+import { Repository } from 'typeorm';
+import { createHash } from 'crypto';
 
 @Controller('workflows')
 export class WorkflowsController {
-  constructor(private readonly workflowsService: WorkflowsService) {}
+  constructor(
+    private readonly workflowsService: WorkflowsService,
+    @InjectRepository(Inbox)
+    private readonly inboxRepository: Repository<Inbox>,
+  ) {}
 
   @EventPattern('workflows.create')
-  create(@Payload() createWorkflowDto: CreateWorkflowDto) {
-    return this.workflowsService.create(createWorkflowDto);
+  async create(
+    @Payload() createWorkflowDto: CreateWorkflowDto,
+    @Ctx() context: RmqContext, // 👈
+  ) {
+    console.log('getPattern:', context.getPattern());
+    const message = context.getMessage();
+
+    // get the md5 hash of the message content
+    // had to do this because the message.properties.messageId was always undefined
+    const messageId = createHash('md5')
+      .update(message.content.toString())
+      .digest('hex');
+
+    const inboxMessage = await this.inboxRepository.findOne({
+      where: {
+        messageId: messageId,
+      },
+    });
+    if (!inboxMessage) {
+      await this.inboxRepository.save({
+        messageId,
+        pattern: context.getPattern(),
+        status: 'pending',
+        payload: createWorkflowDto,
+      });
+    }
+
+    const channel = context.getChannelRef();
+    channel.ack(message);
   }
 
   @Get()
